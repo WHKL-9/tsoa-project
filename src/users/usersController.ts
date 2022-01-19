@@ -14,16 +14,17 @@ import {
 import { User } from "./user";
 import { UsersService, UserCreationParams } from "./usersService";
 import { InvalidName } from "./error";
- 
 
 interface ValidateErrorJSON {
   message: "Validation failed";
   details: { [name: string]: unknown };
 }
+
 // we are defining a /users/ route using @Route decorator
 // similar as if we are using app.get('users/"userId')
 @Route("users")
 export class UsersController extends Controller {
+  [x: string]: any;
   //description -> to let users better understand what this function is about
   /**
    * Retrieves the details of an existing user.
@@ -31,11 +32,12 @@ export class UsersController extends Controller {
    * @param userId The user's identifier
    * @param name Provide a username to display
    */
+  public userService:UsersService
+  constructor() {
+    super()
+    this.userService = new UsersService();
+  }
 
-  //example response 
-
-  // Task 
-  // add a constructor to be shared across the methods 
   @Example<User>({
     id: "52907745-7672-470e-a803-a2f8feb52944",
     name: "tsoa user",
@@ -49,13 +51,13 @@ export class UsersController extends Controller {
     @Query() name: string
   ): Promise<User | void> {
     try {
-      const userDetails = new UsersService().get(userId, name);
-      this.setStatus(200)
-      return userDetails
-    } catch(err) {
-        if (err instanceof InvalidName) {
-          return 
-        }
+      const userDetails = this.userService.get(userId, name);
+      this.setStatus(200);
+      return userDetails;
+    } catch (err) {
+      if (err instanceof InvalidName) {
+        return;
+      }
     }
   }
   @Response<ValidateErrorJSON>(422, "Validation Failed")
@@ -65,7 +67,7 @@ export class UsersController extends Controller {
     @Body() requestBody: UserCreationParams
   ): Promise<void> {
     this.setStatus(201); // set return status 201
-    new UsersService().create(requestBody);
+    this.userService.create(requestBody);
     return;
   }
 }

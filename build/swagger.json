@@ -150,11 +150,9 @@
 						}
 					}
 				},
-				"description": "Retrieves the details of an existing user.\r\nSupply the unique user ID from either and receive corresponding user details.",
 				"security": [],
 				"parameters": [
 					{
-						"description": "The user's identifier",
 						"in": "path",
 						"name": "userId",
 						"required": true,
@@ -163,7 +161,6 @@
 						}
 					},
 					{
-						"description": "Provide a username to display",
 						"in": "query",
 						"name": "name",
 						"required": true,

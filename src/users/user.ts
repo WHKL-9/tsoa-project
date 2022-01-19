@@ -30,3 +30,4 @@ export interface User {
   status?: "Happy" | "Sad";
   phoneNumbers: string[];
 }
+
